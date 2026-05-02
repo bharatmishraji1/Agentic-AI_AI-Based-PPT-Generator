@@ -62,8 +62,10 @@ Manual slide creation is often a bottleneck in productivity. This project levera
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/agentic-ai-ai-based-ppt-generator.git
-cd agentic-ai-ai-based-ppt-generator
+git clone https://github.com/your-username/Agentic-AI_AI-Based-PPT-Generator
+
+cd Agentic-AI_AI-Based-PPT-Generator
+
 ```
 
 ### 2. Set Up Environment
