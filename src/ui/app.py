@@ -1,12 +1,17 @@
 import streamlit as st
-import requests
+import os
+
+
+from src.agents.content_extractor import ContentExtractor
+from src.agents.summarizer import Summarizer
+from src.agents.slide_generator import SlideGenerator
 
 # =========================
 # CONFIG
 # =========================
 st.set_page_config(page_title="AI Slide Generator", layout="wide")
 
-API_BASE = "http://127.0.0.1:8000"
+os.makedirs("output", exist_ok=True)
 
 # =========================
 # CUSTOM CSS
@@ -43,11 +48,6 @@ body {
     border-radius: 8px;
     padding: 10px;
     width: 100%;
-}
-
-.primary-btn button {
-    background: #1e293b;
-    color: white;
 }
 
 .download-btn button {
@@ -90,7 +90,7 @@ st.write("")
 st.write("")
 
 # =========================
-# UPLOAD + GENERATE CARD
+# MAIN CARD
 # =========================
 col1, col2, col3 = st.columns([1, 2, 1])
 
@@ -102,42 +102,57 @@ with col2:
         type=["pdf", "docx", "csv", "txt"]
     )
 
-    if st.button("Upload File"):
-        if uploaded_file:
-            files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
-            res = requests.post(f"{API_BASE}/upload/", files=files)
+    if uploaded_file:
+        # Save file locally
+        file_path = f"temp_{uploaded_file.name}"
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
 
-            if res.status_code == 200:
-                st.success("Uploaded successfully")
-            else:
-                st.error("Upload failed")
-        else:
-            st.warning("Please select a file")
+        st.success("File uploaded successfully")
 
-    if st.button("⚡ Generate Slides"):
-        with st.spinner("Generating slides..."):
-            res = requests.get(f"{API_BASE}/generate/")
-            data = res.json()
+        if st.button("⚡ Generate Slides"):
 
-            if "download_url" in data:
-                st.success("Slides generated!")
+            with st.spinner("Generating slides..."):
 
-                st.markdown(f"""
-                <a href="{API_BASE}{data['download_url']}" target="_blank">
-                    <button style="
-                        background:#22c55e;
-                        color:white;
-                        padding:10px 20px;
-                        border:none;
-                        border-radius:8px;
-                        width:100%;
-                    ">
-                         Download PPT
-                    </button>
-                </a>
-                """, unsafe_allow_html=True)
-            else:
-                st.error(data.get("error", "Error"))
+                try:
+                    # 1. Extract text
+                    extractor = ContentExtractor(directory=".")
+                    text = extractor.extract_from_file(file_path)
+
+                    # 2. Summarize
+                    summarizer = Summarizer()
+                    summary = summarizer.summarize_text(text)
+
+                    # 3. Convert to bullet points
+                    points = [
+                        p.strip() for p in summary.split("\n") if p.strip()
+                    ]
+
+                    # 4. Generate slides
+                    slide_gen = SlideGenerator(output_dir="output/")
+
+                    slides_data = [{
+                        "title": "Generated Presentation",
+                        "type": "content",
+                        "content": points[:5]
+                    }]
+
+                    slide_gen.generate_presentation(slides_data)
+
+                    ppt_path = "output/generated_presentation.pptx"
+
+                    # 5. Download button
+                    with open(ppt_path, "rb") as f:
+                        st.download_button(
+                            label="Download PPT",
+                            data=f,
+                            file_name="AI_Presentation.pptx"
+                        )
+
+                    st.success("Slides generated successfully!")
+
+                except Exception as e:
+                    st.error(f"Error: {str(e)}")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -147,7 +162,7 @@ with col2:
 st.write("")
 st.write("")
 
-st.markdown("## How it works")
+st.markdown("## 🚀 How it works")
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -174,6 +189,6 @@ st.markdown("""
 <br><br>
 <hr>
 <p style='text-align:center;color:#64748b'>
-Built with AI • Streamlit App
+Built by Bharar Mishra • Streamlit App
 </p>
 """, unsafe_allow_html=True)
