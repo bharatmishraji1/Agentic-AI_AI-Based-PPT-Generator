@@ -19,9 +19,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
-# =========================
-# 📤 Upload API
-# =========================
+
 @router.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
     try:
@@ -52,9 +50,7 @@ async def upload_file(file: UploadFile = File(...)):
         return {"error": str(e)}
 
 
-# =========================
-# 🧠 Generate PPT API
-# =========================
+
 @router.get("/generate/")
 async def generate_presentation():
     try:
@@ -79,7 +75,7 @@ async def generate_presentation():
                 "content": summary_points[:5]
             })
 
-        # ✅ correct usage
+        
         slide_generator.generate_presentation(all_slides)
 
         return {
@@ -92,9 +88,7 @@ async def generate_presentation():
         return {"error": str(e)}
 
 
-# =========================
-# 📥 Download API
-# =========================
+
 @router.get("/download/")
 async def download_presentation(filename: str):
     return FileResponse(
