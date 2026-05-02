@@ -2,14 +2,14 @@ import streamlit as st
 import requests
 
 # =========================
-# ⚙️ CONFIG
+# CONFIG
 # =========================
 st.set_page_config(page_title="AI Slide Generator", layout="wide")
 
 API_BASE = "http://127.0.0.1:8000"
 
 # =========================
-# 🎨 CUSTOM CSS
+# CUSTOM CSS
 # =========================
 st.markdown("""
 <style>
@@ -58,7 +58,7 @@ body {
 """, unsafe_allow_html=True)
 
 # =========================
-# 📌 SIDEBAR
+# SIDEBAR
 # =========================
 with st.sidebar:
     st.image("assets/hero2.png", width=150)
@@ -75,7 +75,7 @@ with st.sidebar:
 """)
 
 # =========================
-# 🎯 HERO SECTION
+# HERO SECTION
 # =========================
 col1, col2 = st.columns([1, 2])
 
@@ -90,7 +90,7 @@ st.write("")
 st.write("")
 
 # =========================
-# 📂 UPLOAD + GENERATE CARD
+# UPLOAD + GENERATE CARD
 # =========================
 col1, col2, col3 = st.columns([1, 2, 1])
 
@@ -102,7 +102,7 @@ with col2:
         type=["pdf", "docx", "csv", "txt"]
     )
 
-    if st.button("📤 Upload File"):
+    if st.button("Upload File"):
         if uploaded_file:
             files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
             res = requests.post(f"{API_BASE}/upload/", files=files)
@@ -132,7 +132,7 @@ with col2:
                         border-radius:8px;
                         width:100%;
                     ">
-                        📥 Download PPT
+                         Download PPT
                     </button>
                 </a>
                 """, unsafe_allow_html=True)
@@ -142,12 +142,12 @@ with col2:
     st.markdown("</div>", unsafe_allow_html=True)
 
 # =========================
-# ⭐ FEATURES SECTION
+# FEATURES SECTION
 # =========================
 st.write("")
 st.write("")
 
-st.markdown("## 🚀 How it works")
+st.markdown("## How it works")
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -168,7 +168,7 @@ with col4:
     st.markdown("<div class='feature-title'>Download PPT</div>", unsafe_allow_html=True)
 
 # =========================
-# 🎨 FOOTER
+# FOOTER
 # =========================
 st.markdown("""
 <br><br>
