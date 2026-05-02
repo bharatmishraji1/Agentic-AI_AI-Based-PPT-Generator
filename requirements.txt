@@ -7,3 +7,4 @@ pandas
 pymupdf
 python-docx
 python-dotenv
+openai
