@@ -193,6 +193,6 @@ st.markdown("""
 <br><br>
 <hr>
 <p style='text-align:center;color:#64748b'>
-Built by Bharar Mishra • Streamlit App
+Built by Bharat Mishra • Streamlit App 
 </p>
 """, unsafe_allow_html=True)
