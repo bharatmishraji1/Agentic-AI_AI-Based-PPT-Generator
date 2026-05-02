@@ -1,6 +1,10 @@
 import streamlit as st
 import os
 
+import sys
+
+sys.path.append(os.path.abspath("."))
+
 
 from src.agents.content_extractor import ContentExtractor
 from src.agents.summarizer import Summarizer
