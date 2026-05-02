@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import fitz
 from docx import Document 
-from llama_index.core import SimpleDirectoryReader
 
 class ContentExtractor:
     def __init__(self, directory = "data/"):
